@@ -8,6 +8,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
+use yii\web\UploadedFile;
 
 /**
  * VideoController implements the CRUD actions for Video model.
@@ -59,15 +61,18 @@ class VideoController extends Controller
 
     /**
      * Creates a new Video model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+    * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Video();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->video_id]);
+        
+        $model->video = UploadedFile::getInstanceByName('video');
+        // var_dump($model->video);
+        
+        if (Yii::$app->request->isPost && $model->save()) {
+            return $this->redirect(['update', 'id' => $model->video_id]);
         }
 
         return $this->render('create', [
