@@ -64,7 +64,7 @@ class Video extends \yii\db\ActiveRecord
             ['has_thumbnail', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_UNLISTED],
             ['thumbnail', 'image', 'minWidth' => 1280],
-            ['video', 'file', 'extensions' => ['mp4']],
+            // ['video', 'file', 'extensions' => ['mp4']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
@@ -130,13 +130,13 @@ class Video extends \yii\db\ActiveRecord
     {
         $isInsert = $this->isNewRecord;
 
-        // var_dump($this);
+        // var_dump($this->video);
         // exit;
 
         if ($isInsert) {
             $this->video_id = Yii::$app->security->generateRandomString(8);
-            $this->title = $this->video->name;
             $this->video_name = $this->video->name;
+            $this->title = $this->video->name;
         }
         if ($this->thumbnail) {
             $this->has_thumbnail = 1;
@@ -183,5 +183,16 @@ class Video extends \yii\db\ActiveRecord
     {
         return $this->has_thumbnail ? Yii::$app->params['frontendUrl'] . 'storage/thumbs/'.$this->video_id.'.jpg'
         : '';        
+    }
+
+    public function afterDelete() {
+        parent::afterDelete();
+
+        $videoPath = Yii::getAlias('@frontend/web/storage/videos/' . $this->video_id . '.mp4');
+        $thumbnailPath = Yii::getAlias('@frontend/web/storage/thumbs/' . $this->video_id . '.jpg');
+        unlink($videoPath);
+        if (file_exists($thumbnailPath)) {
+            unlink($thumbnailPath);
+        }
     }
 }

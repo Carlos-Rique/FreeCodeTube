@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute' => 'video_id',
+                'attribute' => 'title',
                 'content' => function($model){
                     return $this->render('_video_item',['model' => $model]);
                 }
@@ -41,7 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
             //'created_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+            'buttons' => [
+                'delete' => function($url) {
+                    return Html::a('delete', $url, 
+                                    ['data-method' => 'post',
+                                    'data-confirm' => 'Are you Sure?']
+                                );
+                }
+            ]
+            ]
         ],
     ]); ?>
 
