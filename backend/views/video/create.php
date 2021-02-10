@@ -29,12 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['enctype' => 'multipart/form-data']
       ]) ?>
 
-      <?php echo $form->errorSummary($model); ?>
+      <?php echo $form->errorSummary($model);?>
 
-        <button class="btn btn-primary btn-file">
+        <span class="btn btn-primary btn-file">
               Select file
               <input type="file" name="video" id="videoFile">
-        </button>
+        </span>
 
       <?php ActiveForm::end() ?>
   </div>

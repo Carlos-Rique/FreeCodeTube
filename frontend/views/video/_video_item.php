@@ -19,7 +19,7 @@ use yii\i18n\Formatter;
   </a>
   <div class="card-body p-2">
     <h5 class="card-title m-0"><?= $model->title?></h5>
-    <p class="text-muted card-text m-0 "><?= $model->createdBy->username ?></p>  
+    <p class="text-muted card-text m-0 "><?= \common\helpers\Html::channelLink($model->createdBy) ?></p>  
     <p class="text-muted card-text m-0 ">
       <?= $model->getViews()->count() ?> views . 
       <?= Yii::$app->formatter->asRelativeTime($model->created_at) ?>

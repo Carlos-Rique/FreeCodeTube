@@ -51,6 +51,7 @@ aside .nav-pills .nav-link.active {
     position: relative;
 }
 .btn-file input {
+    cursor: pointer;
     position: absolute;
     left: 0;
     right: 0;

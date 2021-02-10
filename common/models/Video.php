@@ -15,7 +15,7 @@ use Imagine\Image\Box;
  *
  * @property string $video_id
  * @property string $title
- * @property string|null $descritption
+ * @property string|null $description
  * @property string|null $tags
  * @property int|null $status
  * @property int|null $has_thumbnail
@@ -25,6 +25,7 @@ use Imagine\Image\Box;
  * @property int|null $created_by
  *
  * @property User $createdBy
+ * @property \common\models\VideoLike[] $likes
  */
 class Video extends \yii\db\ActiveRecord
 {
@@ -56,7 +57,7 @@ class Video extends \yii\db\ActiveRecord
     {
         return [
             [['video_id', 'title'], 'required'],
-            [['descritption'], 'string'],
+            [['description'], 'string'],
             [['status', 'has_thumbnail', 'created_at', 'updated_at', 'created_by'], 'integer'],
             [['video_id'], 'string', 'max' => 16],
             [['title', 'tags', 'video_name'], 'string', 'max' => 512],
@@ -64,7 +65,7 @@ class Video extends \yii\db\ActiveRecord
             ['has_thumbnail', 'default', 'value' => 0],
             ['status', 'default', 'value' => self::STATUS_UNLISTED],
             ['thumbnail', 'image', 'minWidth' => 1280],
-            // ['video', 'file', 'extensions' => ['mp4']],
+            ['video', 'file', 'extensions' => ['mp4']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
@@ -88,7 +89,7 @@ class Video extends \yii\db\ActiveRecord
         return [
             'video_id' => 'Video ID',
             'title' => 'Title',
-            'descritption' => 'Descritption',
+            'description' => 'Description',
             'tags' => 'Tags',
             'status' => 'Status',
             'has_thumbnail' => 'Has Thumbnail',
@@ -126,6 +127,22 @@ class Video extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLikes()
+    {
+        return $this->hasMany(VideoLike::class, ['video_id' => 'video_id'])->liked();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDisLikes()
+    {
+        return $this->hasMany(VideoLike::class, ['video_id' => 'video_id'])->disliked();
+    }
+
+    /**
      * {@inheritdoc}
      * @return \common\models\query\VideoQuery the active query used by this AR class.
      */
@@ -138,7 +155,7 @@ class Video extends \yii\db\ActiveRecord
     {
         $isInsert = $this->isNewRecord;
 
-        // var_dump($this->video);
+        // var_dump($this->video->name);
         // exit;
 
         if ($isInsert) {
@@ -209,6 +226,14 @@ class Video extends \yii\db\ActiveRecord
         return VideoLike::find()
             ->userIdVideoId($userId, $this->video_id)
             ->liked()
+            ->one();
+    }
+
+    public function isDisLikedBy($userId)
+    {
+        return VideoLike::find()
+            ->userIdVideoId($userId, $this->video_id)
+            ->disliked()
             ->one();
     }
 }

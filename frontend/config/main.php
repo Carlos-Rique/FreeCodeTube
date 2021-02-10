@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'defaultRoute' => '/video/index',
+    'layout' => 'auth',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -41,7 +42,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'video/view/<id>' => 'video/view'
+                'video/view/<id>' => 'video/view',
+                'c/<username>' => 'channel/view',
             ],
         ],
         'assetManager' => [

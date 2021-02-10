@@ -23,7 +23,7 @@ use yii\bootstrap4\ActiveForm;
             <?= $form->errorSummary($model) ?>
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'descritption')->textarea(['rows' => 6]) ?>
+            <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
             <div class="form-group">
                 <label><?= $model->getAttributeLabel('thumbnail') ?></label>

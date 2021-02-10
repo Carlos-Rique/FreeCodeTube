@@ -57,19 +57,6 @@ class VideoController extends Controller
     }
 
     /**
-     * Displays a single Video model.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Video model.
     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -77,10 +64,7 @@ class VideoController extends Controller
     public function actionCreate()
     {
         $model = new Video();
-        
         $model->video = UploadedFile::getInstanceByName('video');
-        // var_dump($model->video);
-        // die;
         if (Yii::$app->request->isPost && $model->save()) {
             return $this->redirect(['update', 'id' => $model->video_id]);
         }
@@ -100,9 +84,8 @@ class VideoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         $model->thumbnail = UploadedFile::getInstanceByName('thumbnail');
-
+ 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->video_id]);
         }
